@@ -1,0 +1,9 @@
+#:import hex_color kivy.utils.get_color_from_hex
+
+<GameWidget>:
+    canvas.before:
+        Color:
+            rgb: hex_color('#FFFFFF')
+        Rectangle:
+            pos: self.pos
+            size: self.size
