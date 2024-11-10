@@ -7,3 +7,5 @@ This is still a work in progress, and there are no working binaries for the game
 3. If this works well I might also make an iOS version, but I'm not making any promises yet.
 
 This is a project I'm working on in my spare time, and as such, development might be a bit slow.
+
+This project makes use of the [Kivy](https://kivy.org/) framework and its dependencies.
