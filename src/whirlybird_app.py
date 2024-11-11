@@ -34,9 +34,9 @@ class GameWidget(Widget):
             for child in self.children:
                 child.y = cancel_velocity * dt + child.y
             if random() < self.app.config['platform_spawn_chance']:
-                self.add_widget(PlatformWidget())
+                self.add_widget(PlatformWidget(self.children))
         elif len(self.children) < 5:
-            self.add_widget(PlatformWidget(randomise_y=True))
+            self.add_widget(PlatformWidget(self.children, randomise_y=True))
         for child in self.children:
             if child is self.player:
                 continue
@@ -56,13 +56,6 @@ class BasePlatform(Widget):
             random() * (Window.height - height) if randomise_y
             else Window.height * 0.97
         )
-        app: WhirlybirdApp = App.get_running_app()
-        for platform in platforms:
-            if platform is app.game_widget.player:
-                continue
-            if self.collide_widget(platform):
-                app.game_widget.remove_widget(self)
-                break
 
 class PlatformWidget(BasePlatform):
     """The platform widget class."""
