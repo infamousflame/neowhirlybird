@@ -1,7 +1,7 @@
 """Runs the actual game."""
 
 from json import loads
-from random import random, randrange
+from random import random
 from sys import exit as sys_exit
 
 from kivy.app import App
@@ -47,13 +47,22 @@ class GameWidget(Widget):
 class BasePlatform(Widget):
     """The base platform widget class."""
 
-    def __init__(self, randomise_y: bool = False, *args, **kwargs) -> None:
+    def __init__(self, platforms: list, randomise_y: bool = False, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
+        width: float = min(Window.width, Window.height) * 0.13
+        height: float = min(Window.width, Window.height) * 0.03
         self.pos = (
-            randrange(0, App.get_running_app().game_widget.width),
-            randrange(0, App.get_running_app().game_widget.height) if randomise_y
-            else App.get_running_app().game_widget.height - self.height
+            random() * (Window.width - width),
+            random() * (Window.height - height) if randomise_y
+            else Window.height * 0.97
         )
+        app: WhirlybirdApp = App.get_running_app()
+        for platform in platforms:
+            if platform is app.game_widget.player:
+                continue
+            if self.collide_widget(platform):
+                app.game_widget.remove_widget(self)
+                break
 
 class PlatformWidget(BasePlatform):
     """The platform widget class."""
