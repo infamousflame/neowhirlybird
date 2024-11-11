@@ -75,8 +75,10 @@ class Player(Widget):
         match key:
             case 97:
                 self.velocity.x = -300
+                self.ids['image'].source = 'assets/images/player_l.png'
             case 100:
                 self.velocity.x = 300
+                self.ids['image'].source = 'assets/images/player_r.png'
 
     def _on_key_up(self, window, key, *args) -> None:
         match key:
