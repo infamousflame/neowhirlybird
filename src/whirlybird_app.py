@@ -3,7 +3,7 @@
 from kivy.app import App
 from kivy.lang.builder import Builder
 
-from display.game_widget import GameWidget
+from game_widget import GameWidget
 
 
 class WhirlybirdApp(App):
