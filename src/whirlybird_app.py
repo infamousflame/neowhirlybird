@@ -2,6 +2,7 @@
 
 from json import loads
 from random import random, randrange
+from sys import exit
 
 from kivy.app import App
 from kivy.clock import Clock
@@ -16,10 +17,17 @@ class GameWidget(Widget):
 
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
-        self.player: Player = self.ids["player_widget"]
+        self.player: Player = self.ids['player_widget']
 
     def update(self, dt: float) -> None:
-        if len(self.children) < 5:
+        if self.player.center_y < 0.125 * self.height and self.player.velocity.y < 0:
+            cancel_velocity = -self.player.velocity.y
+            for child in self.children:
+                child.y = cancel_velocity * dt + child.y
+            self.player.ids['rectangle'].source = 'assets/images/player_death.png'
+            if len(self.children) < 2:
+                exit()
+        elif len(self.children) < 5:
             self.add_widget(PlatformWidget(randomise_y=True))
         self.player.update(dt, self.children)
         if self.player.center_y > 0.875 * self.height and self.player.velocity.y > 0:
@@ -29,7 +37,9 @@ class GameWidget(Widget):
             if random() < App.get_running_app().config['platform_spawn_chance']:
                 self.add_widget(PlatformWidget())
         for child in self.children:
-            if child.center_y < 0:
+            if child is self.player:
+                continue
+            if child.center_y < 0 or child.center_y > self.height:
                 self.remove_widget(child)
 
 
@@ -53,9 +63,9 @@ class Player(Widget):
 
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
-        self.velocity = Vector(0, App.get_running_app().config["bounce"])
+        self.velocity = Vector(0, App.get_running_app().config['bounce'])
         self.acceration = Vector(0,
-            -App.get_running_app().config["gravity"]
+            -App.get_running_app().config['gravity']
         )
         Window.bind(on_key_down=self.on_key_down)
         Window.bind(on_key_up=self.on_key_up)
@@ -87,7 +97,7 @@ class Player(Widget):
                     self.collide_widget(platform)
                     and self.y > platform.y
                 ):
-                    self.velocity.y = App.get_running_app().config["bounce"]
+                    self.velocity.y = App.get_running_app().config['bounce']
         if self.center_x < 0:
             self.x += App.get_running_app().game_widget.width
         elif self.center_x > App.get_running_app().game_widget.width:
