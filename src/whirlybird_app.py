@@ -1,7 +1,7 @@
 """Runs the actual game."""
 
 from json import loads
-from random import random
+from random import choice, random
 from sys import exit as sys_exit
 
 from kivy.app import App
@@ -10,55 +10,6 @@ from kivy.core.window import Window
 from kivy.lang.builder import Builder
 from kivy.vector import Vector
 from kivy.uix.widget import Widget
-
-
-class GameWidget(Widget):
-    """The game widget class."""
-
-    def __init__(self, *args, **kwargs) -> None:
-        super().__init__(*args, **kwargs)
-        self.player: Player = self.ids['player_widget']
-        self.app: WhirlybirdApp = App.get_running_app()
-
-    def update(self, dt: float) -> None:
-        self.player.update(dt, self.children)
-        if self.player.center_y < 0.125 * self.height and self.player.velocity.y < 0:
-            cancel_velocity = -self.player.velocity.y
-            for child in self.children:
-                child.y = cancel_velocity * dt + child.y
-            self.player.ids['image'].source = 'assets/images/player_death.png'
-            if len(self.children) < 2:
-                sys_exit()
-        elif self.player.center_y > 0.875 * self.height and self.player.velocity.y > 0:
-            cancel_velocity = -self.player.velocity.y
-            for child in self.children:
-                child.y = cancel_velocity * dt + child.y
-            if random() < self.app.config['platform_spawn_chance']:
-                self.add_widget(PlatformWidget(self.children))
-        elif len(self.children) < 5:
-            self.add_widget(PlatformWidget(self.children, randomise_y=True))
-        for child in self.children:
-            if child is self.player:
-                continue
-            if child.center_y < 0 or child.center_y > self.height:
-                self.remove_widget(child)
-
-
-class BasePlatform(Widget):
-    """The base platform widget class."""
-
-    def __init__(self, platforms: list, randomise_y: bool = False, *args, **kwargs) -> None:
-        super().__init__(*args, **kwargs)
-        width: float = min(Window.width, Window.height) * 0.13
-        height: float = min(Window.width, Window.height) * 0.03
-        self.pos = (
-            random() * (Window.width - width),
-            random() * (Window.height - height) if randomise_y
-            else Window.height * 0.97
-        )
-
-class PlatformWidget(BasePlatform):
-    """The platform widget class."""
 
 
 class Player(Widget):
@@ -95,20 +46,88 @@ class Player(Widget):
     def update(self, dt: float, platforms: list) -> None:
         self.pos = self.velocity * dt + self.pos
         self.velocity += self.acceration * dt
-        if self.velocity.y < 0:
-            for platform in platforms:
-                if platform is self:
-                    continue
-                if (
-                    self.collide_widget(platform)
-                    and self.y > platform.y
-                ):
-                    self.velocity.y = self.app.config['bounce'] * Window.height
+        for platform in platforms:
+            if platform is self:
+                continue
+            if self.collide_widget(platform):
+                platform.handle_collision(self)
         width: float = Window.width
         if self.center_x < 0:
             self.x += width
         elif self.center_x > width:
             self.x -= width
+
+
+class BasePlatform(Widget):
+    """The base platform widget class."""
+
+    def __init__(self, platforms: list, randomise_y: bool = False, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
+        width: float = min(Window.width, Window.height) * 0.13
+        height: float = min(Window.width, Window.height) * 0.03
+        self.pos = (
+            random() * (Window.width - width),
+            random() * (Window.height - height) if randomise_y
+            else Window.height * 0.97
+        )
+
+class Platform(BasePlatform):
+    """The platform widget class."""
+
+    def handle_collision(self, player: Player) -> None:
+        if player.y > self.y and player.velocity.y < 0:
+            player.velocity.y = player.app.config['bounce'] * Window.height
+
+
+class Cloud(BasePlatform):
+    """The cloud widget class."""
+
+    def handle_collision(self, player: Player) -> None:
+        App.get_running_app().game_widget.remove_widget(self)
+
+
+class GameWidget(Widget):
+    """The game widget class."""
+
+    PLATFORM_CLASSES = (Platform, Cloud)
+
+    def __init__(self, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
+        self.player: Player = self.ids['player_widget']
+        self.app: WhirlybirdApp = App.get_running_app()
+        self.jumpable_platforms: int = 0
+
+    def update(self, dt: float) -> None:
+        self.player.update(dt, self.children)
+        if self.player.center_y < 0.125 * self.height and self.player.velocity.y < 0:
+            cancel_velocity = -self.player.velocity.y
+            for child in self.children:
+                child.y = cancel_velocity * dt + child.y
+            self.player.ids['image'].source = 'assets/images/player_death.png'
+            if len(self.children) < 2:
+                sys_exit()
+        elif self.player.center_y > 0.875 * self.height and self.player.velocity.y > 0:
+            cancel_velocity = -self.player.velocity.y
+            for child in self.children:
+                child.y = cancel_velocity * dt + child.y
+            if random() < self.app.config['platform_spawn_chance']:
+                self.add_platform()
+        elif self.jumpable_platforms < 5:
+            self.add_widget(Platform(self.children, randomise_y=True))
+            self.jumpable_platforms += 1
+        for child in self.children:
+            if child is self.player:
+                continue
+            if child.center_y < 0 or child.center_y > self.height:
+                if isinstance(child, Platform):
+                    self.jumpable_platforms -= 1
+                self.remove_widget(child)
+
+    def add_platform(self) -> None:
+        widget_class: type = choice(self.PLATFORM_CLASSES)
+        self.add_widget(widget_class(self.children))
+        if widget_class is Platform:
+            self.jumpable_platforms += 1
 
 
 class WhirlybirdApp(App):

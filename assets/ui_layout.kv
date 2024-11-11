@@ -23,7 +23,7 @@
         source: 'assets/images/player.png'
 
 
-<PlatformWidget>:
+<Platform>:
     size:
         min(app.game_widget.width, app.game_widget.height) * 0.13,\
         min(app.game_widget.width, app.game_widget.height) * 0.03
@@ -31,3 +31,13 @@
         size: root.size
         pos: root.pos
         source: 'assets/images/platform.png'
+
+
+<Cloud>:
+    size:
+        min(app.game_widget.width, app.game_widget.height) * 0.13,\
+        min(app.game_widget.width, app.game_widget.height) * 0.05
+    Image:
+        size: root.size
+        pos: root.pos
+        source: 'assets/images/cloud.png'
