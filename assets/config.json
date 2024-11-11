@@ -1,5 +1,5 @@
 {
-    "gravity": 200,
-    "bounce": 300,
+    "gravity": 300,
+    "bounce": 500,
     "platform_spawn_chance": 0.015625
 }

@@ -5,6 +5,7 @@ from random import random, randrange
 
 from kivy.app import App
 from kivy.clock import Clock
+from kivy.core.window import Window
 from kivy.lang.builder import Builder
 from kivy.vector import Vector
 from kivy.uix.widget import Widget
@@ -22,9 +23,9 @@ class GameWidget(Widget):
             self.add_widget(PlatformWidget(randomise_y=True))
         self.player.update(dt, self.children)
         if self.player.center_y > 0.875 * self.height and self.player.velocity.y > 0:
-            cancel_velocity = -self.player.velocity
+            cancel_velocity = -self.player.velocity.y
             for child in self.children:
-                child.pos = cancel_velocity * dt + child.pos
+                child.y = cancel_velocity * dt + child.y
             if random() < App.get_running_app().config['platform_spawn_chance']:
                 self.add_widget(PlatformWidget())
         for child in self.children:
@@ -56,16 +57,41 @@ class Player(Widget):
         self.acceration = Vector(0,
             -App.get_running_app().config["gravity"]
         )
+        Window.bind(on_key_down=self.on_key_down)
+        Window.bind(on_key_up=self.on_key_up)
+
+    def on_key_down(self, window, key, *args) -> None:
+        match key:
+            case 97:
+                self.velocity.x = -300
+            case 100:
+                self.velocity.x = 300
+
+    def on_key_up(self, window, key, *args) -> None:
+        match key:
+            case 97:
+                if self.velocity.x < 0:
+                    self.velocity.x = 0
+            case 100:
+                if self.velocity.x > 0:
+                    self.velocity.x = 0
 
     def update(self, dt: float, platforms: list) -> None:
         self.pos = self.velocity * dt + self.pos
         self.velocity += self.acceration * dt
-        if self.velocity.y < 10:
+        if self.velocity.y < 0:
             for platform in platforms:
                 if platform is self:
                     continue
-                if self.collide_widget(platform):
+                if (
+                    self.collide_widget(platform)
+                    and self.y > platform.y
+                ):
                     self.velocity.y = App.get_running_app().config["bounce"]
+        if self.center_x < 0:
+            self.x += App.get_running_app().game_widget.width
+        elif self.center_x > App.get_running_app().game_widget.width:
+            self.x -= App.get_running_app().game_widget.width
 
 
 class WhirlybirdApp(App):
