@@ -1,37 +1,71 @@
 """Runs the actual game."""
 
 from json import loads
+from random import random, randrange
 
 from kivy.app import App
 from kivy.clock import Clock
 from kivy.lang.builder import Builder
-from kivy.properties import ObjectProperty
+from kivy.vector import Vector
 from kivy.uix.widget import Widget
 
 
 class GameWidget(Widget):
     """The game widget class."""
-    player: ObjectProperty = ObjectProperty(None)
 
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
+        self.player: Player = self.ids["player_widget"]
 
     def update(self, dt: float) -> None:
-        self.player.update(dt)
+        if len(self.children) < 5:
+            self.add_widget(PlatformWidget(randomise_y=True))
+        self.player.update(dt, self.children)
+        if self.player.center_y > 0.875 * self.height and self.player.velocity.y > 0:
+            cancel_velocity = -self.player.velocity
+            for child in self.children:
+                child.pos = cancel_velocity * dt + child.pos
+            if random() < App.get_running_app().config['platform_spawn_chance']:
+                self.add_widget(PlatformWidget())
+        for child in self.children:
+            if child.center_y < 0:
+                self.remove_widget(child)
+
+
+class BasePlatform(Widget):
+    """The base platform widget class."""
+
+    def __init__(self, randomise_y: bool = False, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
+        self.pos = (
+            randrange(0, App.get_running_app().game_widget.width),
+            randrange(0, App.get_running_app().game_widget.height) if randomise_y
+            else App.get_running_app().game_widget.height
+        )
+
+class PlatformWidget(BasePlatform):
+    """The platform widget class."""
 
 
 class Player(Widget):
     """The player widget class."""
+
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
-        self.gravity: float = App.get_running_app().config['gravity']
-        self.velocity_x: float = 0.0
-        self.velocity_y: float = 10.0
+        self.velocity = Vector(0, App.get_running_app().config["bounce"])
+        self.acceration = Vector(0,
+            -App.get_running_app().config["gravity"]
+        )
 
-    def update(self, dt: float) -> None:
-        self.velocity_y -= self.gravity * dt
-        self.x += self.velocity_x
-        self.y += self.velocity_y
+    def update(self, dt: float, platforms: list) -> None:
+        self.pos = self.velocity * dt + self.pos
+        self.velocity += self.acceration * dt
+        if self.velocity.y < 10:
+            for platform in platforms:
+                if platform is self:
+                    continue
+                if self.collide_widget(platform):
+                    self.velocity.y = App.get_running_app().config["bounce"]
 
 
 class WhirlybirdApp(App):
