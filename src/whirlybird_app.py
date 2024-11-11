@@ -6,84 +6,11 @@ from sys import exit as sys_exit
 
 from kivy.app import App
 from kivy.clock import Clock
-from kivy.core.window import Window
 from kivy.lang.builder import Builder
-from kivy.vector import Vector
 from kivy.uix.widget import Widget
 
-
-class Player(Widget):
-    """The player widget class."""
-
-    def __init__(self, *args, **kwargs) -> None:
-        super().__init__(*args, **kwargs)
-        self.app: WhirlybirdApp = App.get_running_app()
-        self.velocity = Vector(0, self.app.config['bounce'] * Window.height)
-        self.acceration = Vector(0,
-            -self.app.config['gravity'] * Window.height
-        )
-        Window.bind(on_key_down=self._on_key_down)
-        Window.bind(on_key_up=self._on_key_up)
-
-    def _on_key_down(self, window, key, *args) -> None:
-        match key:
-            case 97:
-                self.velocity.x = -Window.width * self.app.config['horizontal_speed']
-                self.ids['image'].source = 'assets/images/player_l.png'
-            case 100:
-                self.velocity.x = Window.width  * self.app.config['horizontal_speed']
-                self.ids['image'].source = 'assets/images/player_r.png'
-
-    def _on_key_up(self, window, key, *args) -> None:
-        match key:
-            case 97:
-                if self.velocity.x < 0:
-                    self.velocity.x = 0
-            case 100:
-                if self.velocity.x > 0:
-                    self.velocity.x = 0
-
-    def update(self, dt: float, platforms: list) -> None:
-        self.pos = self.velocity * dt + self.pos
-        self.velocity += self.acceration * dt
-        for platform in platforms:
-            if platform is self:
-                continue
-            if self.collide_widget(platform):
-                platform.handle_collision(self)
-        width: float = Window.width
-        if self.center_x < 0:
-            self.x += width
-        elif self.center_x > width:
-            self.x -= width
-
-
-class BasePlatform(Widget):
-    """The base platform widget class."""
-
-    def __init__(self, platforms: list, randomise_y: bool = False, *args, **kwargs) -> None:
-        super().__init__(*args, **kwargs)
-        width: float = min(Window.width, Window.height) * 0.13
-        height: float = min(Window.width, Window.height) * 0.03
-        self.pos = (
-            random() * (Window.width - width),
-            random() * (Window.height - height) if randomise_y
-            else Window.height * 0.97
-        )
-
-class Platform(BasePlatform):
-    """The platform widget class."""
-
-    def handle_collision(self, player: Player) -> None:
-        if player.y > self.y and player.velocity.y < 0:
-            player.velocity.y = player.app.config['bounce'] * Window.height
-
-
-class Cloud(BasePlatform):
-    """The cloud widget class."""
-
-    def handle_collision(self, player: Player) -> None:
-        App.get_running_app().game_widget.remove_widget(self)
+from platform import Platform, Cloud
+from player import Player
 
 
 class GameWidget(Widget):
