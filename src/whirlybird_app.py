@@ -2,7 +2,7 @@
 
 from json import loads
 from random import random, randrange
-from sys import exit
+from sys import exit as sys_exit
 
 from kivy.app import App
 from kivy.clock import Clock
@@ -18,24 +18,25 @@ class GameWidget(Widget):
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.player: Player = self.ids['player_widget']
+        self.app: WhirlybirdApp = App.get_running_app()
 
     def update(self, dt: float) -> None:
+        self.player.update(dt, self.children)
         if self.player.center_y < 0.125 * self.height and self.player.velocity.y < 0:
             cancel_velocity = -self.player.velocity.y
             for child in self.children:
                 child.y = cancel_velocity * dt + child.y
-            self.player.ids['rectangle'].source = 'assets/images/player_death.png'
+            self.player.ids['image'].source = 'assets/images/player_death.png'
             if len(self.children) < 2:
-                exit()
-        elif len(self.children) < 5:
-            self.add_widget(PlatformWidget(randomise_y=True))
-        self.player.update(dt, self.children)
-        if self.player.center_y > 0.875 * self.height and self.player.velocity.y > 0:
+                sys_exit()
+        elif self.player.center_y > 0.875 * self.height and self.player.velocity.y > 0:
             cancel_velocity = -self.player.velocity.y
             for child in self.children:
                 child.y = cancel_velocity * dt + child.y
-            if random() < App.get_running_app().config['platform_spawn_chance']:
+            if random() < self.app.config['platform_spawn_chance']:
                 self.add_widget(PlatformWidget())
+        elif len(self.children) < 5:
+            self.add_widget(PlatformWidget(randomise_y=True))
         for child in self.children:
             if child is self.player:
                 continue
@@ -51,7 +52,7 @@ class BasePlatform(Widget):
         self.pos = (
             randrange(0, App.get_running_app().game_widget.width),
             randrange(0, App.get_running_app().game_widget.height) if randomise_y
-            else App.get_running_app().game_widget.height
+            else App.get_running_app().game_widget.height - self.height
         )
 
 class PlatformWidget(BasePlatform):
@@ -67,17 +68,17 @@ class Player(Widget):
         self.acceration = Vector(0,
             -App.get_running_app().config['gravity']
         )
-        Window.bind(on_key_down=self.on_key_down)
-        Window.bind(on_key_up=self.on_key_up)
+        Window.bind(on_key_down=self._on_key_down)
+        Window.bind(on_key_up=self._on_key_up)
 
-    def on_key_down(self, window, key, *args) -> None:
+    def _on_key_down(self, window, key, *args) -> None:
         match key:
             case 97:
                 self.velocity.x = -300
             case 100:
                 self.velocity.x = 300
 
-    def on_key_up(self, window, key, *args) -> None:
+    def _on_key_up(self, window, key, *args) -> None:
         match key:
             case 97:
                 if self.velocity.x < 0:
@@ -108,6 +109,8 @@ class WhirlybirdApp(App):
     """The Whirlybird app class."""
 
     def build(self) -> GameWidget:
+        self.title = "Whirlybird"
+        self.icon = "assets/images/player.png"
         with open("assets/config.json") as config_file:
             self.config: dict = loads(config_file.read())
         with open("assets/ui_layout.kv") as kv_file:
