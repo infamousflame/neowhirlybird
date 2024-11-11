@@ -1,6 +1,7 @@
 #:import hex_color kivy.utils.get_color_from_hex
 
 <GameWidget>:
+    player: player_widget
     canvas.before:
         Color:
             rgb: hex_color('#FFFFFF')
@@ -8,13 +9,14 @@
             pos: self.pos
             size: self.size
     Player:
-        pos: root.pos
-        size: root.size
+        id: player_widget
+        size: root.width >> 3, root.height >> 3
+        pos: root.center_x - self.width // 2, root.center_y - self.height // 2
 
 
 <Player>:
     canvas:
         Rectangle:
-            pos: root.pos
-            size: root.size
+            size: (min(root.height, root.width),) * 2
+            pos: root.center_x - min(root.height, root.width) // 2, root.center_y - min(root.height, root.width) // 2
             source: 'assets/images/player.png'
