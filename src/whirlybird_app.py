@@ -2,8 +2,15 @@
 
 from kivy.app import App
 from kivy.lang.builder import Builder
+from kivy.uix.widget import Widget
 
-from game_widget import GameWidget
+
+class GameWidget(Widget):
+    """The game widget class."""
+
+
+class Player(Widget):
+    """The player widget class."""
 
 
 class WhirlybirdApp(App):
