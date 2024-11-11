@@ -64,9 +64,10 @@ class Player(Widget):
 
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
-        self.velocity = Vector(0, App.get_running_app().config['bounce'])
+        self.app: WhirlybirdApp = App.get_running_app()
+        self.velocity = Vector(0, self.app.config['bounce'] * Window.height)
         self.acceration = Vector(0,
-            -App.get_running_app().config['gravity']
+            -self.app.config['gravity'] * Window.height
         )
         Window.bind(on_key_down=self._on_key_down)
         Window.bind(on_key_up=self._on_key_up)
@@ -74,10 +75,10 @@ class Player(Widget):
     def _on_key_down(self, window, key, *args) -> None:
         match key:
             case 97:
-                self.velocity.x = -300
+                self.velocity.x = -Window.width * self.app.config['horizontal_speed']
                 self.ids['image'].source = 'assets/images/player_l.png'
             case 100:
-                self.velocity.x = 300
+                self.velocity.x = Window.width  * self.app.config['horizontal_speed']
                 self.ids['image'].source = 'assets/images/player_r.png'
 
     def _on_key_up(self, window, key, *args) -> None:
@@ -100,11 +101,12 @@ class Player(Widget):
                     self.collide_widget(platform)
                     and self.y > platform.y
                 ):
-                    self.velocity.y = App.get_running_app().config['bounce']
+                    self.velocity.y = self.app.config['bounce'] * Window.height
+        width: float = Window.width
         if self.center_x < 0:
-            self.x += App.get_running_app().game_widget.width
-        elif self.center_x > App.get_running_app().game_widget.width:
-            self.x -= App.get_running_app().game_widget.width
+            self.x += width
+        elif self.center_x > width:
+            self.x -= width
 
 
 class WhirlybirdApp(App):
