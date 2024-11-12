@@ -12,6 +12,7 @@ class GameOverWidget(Widget):
 class GameOverLabel(Widget):
     """A label displayed when the game is over."""
 
+
 class RetryButton(Widget):
     """A button displayed when the game is over, triggers a restart."""
 

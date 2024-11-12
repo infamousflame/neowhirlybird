@@ -37,6 +37,7 @@ class Platform(BasePlatform):
         ):
             player.velocity.y = player.app.config['bounce'] * Window.height
 
+
 class Cloud(BasePlatform):
     """The cloud widget class."""
 
@@ -97,4 +98,4 @@ class MovingPlatform(BasePlatform):
         ):
             player.velocity.y = (
                 player.app.config['bounce'] * Window.height
-        )
+            )

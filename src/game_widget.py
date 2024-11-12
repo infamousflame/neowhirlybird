@@ -10,6 +10,7 @@ from platform import (
     BreakablePlatform, Cloud, MovingPlatform, Platform, Springboard
 )
 
+
 class GameWidget(Widget):
     """The game widget class."""
 
@@ -26,7 +27,7 @@ class GameWidget(Widget):
     def init(self) -> None:
         for i in range(self.app.config['platform_frequency']):
             self.add_widget(Platform(
-                y = i / self.app.config['platform_frequency'] * Window.height
+                y=(i / self.app.config['platform_frequency'] * Window.height)
             ))
 
     def update(self, dt: float) -> None:
@@ -51,7 +52,7 @@ class GameWidget(Widget):
                 child.y = cancel_velocity * dt + child.y
             self.modulus += self.player.velocity.y * dt / Window.height
             if (
-            self.modulus > 1 / self.app.config['platform_frequency']
+                self.modulus > 1 / self.app.config['platform_frequency']
             ):
                 self.modulus -= 1 / self.app.config['platform_frequency']
                 self.add_platform()
