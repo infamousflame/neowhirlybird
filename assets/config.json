@@ -3,5 +3,6 @@
     "horizontal_speed": 0.3,
     "bounce": 0.55,
     "breakable_bounce": 0.65,
-    "platform_spawn_chance": 0.015625
+    "springboard_bounce": 1.0,
+    "platform_spawn_chance": 0.0078125
 }

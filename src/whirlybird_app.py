@@ -9,14 +9,14 @@ from kivy.clock import Clock
 from kivy.lang.builder import Builder
 from kivy.uix.widget import Widget
 
-from platform import BreakablePlatform, Cloud, Platform
+from platform import BreakablePlatform, Cloud, Platform, Springboard
 from player import Player
 
 
 class GameWidget(Widget):
     """The game widget class."""
 
-    PLATFORM_CLASSES = (Platform, Cloud, BreakablePlatform)
+    PLATFORM_CLASSES = (Platform, Cloud, BreakablePlatform, Springboard)
 
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
@@ -43,7 +43,10 @@ class GameWidget(Widget):
             cancel_velocity = -self.player.velocity.y
             for child in self.children:
                 child.y = cancel_velocity * dt + child.y
-            if random() < self.app.config['platform_spawn_chance']:
+            if random() < (
+                self.app.config['platform_spawn_chance']
+                * self.player.velocity.y * dt
+            ):
                 self.add_platform()
         elif self.jumpable_platforms < 5:
             self.add_widget(Platform(self.children, randomise_y=True))

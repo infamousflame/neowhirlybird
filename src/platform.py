@@ -49,3 +49,13 @@ class BreakablePlatform(BasePlatform):
             player.velocity.y = (
                 player.app.config['breakable_bounce'] * Window.height
             )
+
+
+class Springboard(BasePlatform):
+    """The springboard widget class."""
+
+    def handle_collision(self, player: Player) -> None:
+        if player.y > self.y and player.velocity.y < 0:
+            player.velocity.y = (
+                player.app.config['springboard_bounce'] * Window.height
+            )
