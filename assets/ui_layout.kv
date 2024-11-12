@@ -1,4 +1,5 @@
 #:import hex_color kivy.utils.get_color_from_hex
+#:import Window kivy.core.window.Window
 
 <GameWidget>:
     canvas.before:
@@ -25,8 +26,8 @@
 
 <Platform>:
     size:
-        min(app.game_widget.width, app.game_widget.height) * 0.13,\
-        min(app.game_widget.width, app.game_widget.height) * 0.03
+        min(Window.width, Window.height) * 0.13,\
+        min(Window.width, Window.height) * 0.03
     Image:
         size: root.size
         pos: root.pos
@@ -35,8 +36,8 @@
 
 <Cloud>:
     size:
-        min(app.game_widget.width, app.game_widget.height) * 0.13,\
-        min(app.game_widget.width, app.game_widget.height) * 0.05
+        min(Window.width, Window.height) * 0.13,\
+        min(Window.width, Window.height) * 0.05
     Image:
         size: root.size
         pos: root.pos
@@ -45,8 +46,8 @@
 
 <BreakablePlatform>:
     size:
-        min(app.game_widget.width, app.game_widget.height) * 0.13,\
-        min(app.game_widget.width, app.game_widget.height) * 0.03
+        min(Window.width, Window.height) * 0.13,\
+        min(Window.width, Window.height) * 0.03
     Image:
         id: image
         size: root.size
@@ -56,8 +57,8 @@
 
 <Springboard>:
     size:
-        min(app.game_widget.width, app.game_widget.height) * 0.13,\
-        min(app.game_widget.width, app.game_widget.height) * 0.05
+        min(Window.width, Window.height) * 0.13,\
+        min(Window.width, Window.height) * 0.05
     Image:
         size: root.size
         pos: root.pos
@@ -66,8 +67,8 @@
 
 <MovingPlatform>:
     size:
-        min(app.game_widget.width, app.game_widget.height) * 0.13,\
-        min(app.game_widget.width, app.game_widget.height) * 0.05
+        min(Window.width, Window.height) * 0.13,\
+        min(Window.width, Window.height) * 0.05
     Image:
         size: root.size
         pos: root.pos
@@ -81,13 +82,31 @@
         Rectangle:
             pos: self.pos
             size: self.size
-    BoxLayout:
-        orientation: 'vertical'
-        pos: root.width * 0.375, root.height * 0.375
-        size: root.width * 0.25, root.height * 0.25
-        Label:
-            text: 'Game over!'
-            color: hex_color('#555555')
-        Button:
-            text: 'Try again!'
-            on_release: app.start()
+    GameOverLabel:
+        pos:
+            (Window.width - self.width) / 2,\
+            Window.height * 0.75 - self.height / 2
+    RetryButton:
+        pos:
+            (Window.width - self.width) / 2,\
+            Window.height * 0.25 - self.height / 2
+
+
+<GameOverLabel>:
+    size:
+        min(Window.width, Window.height) * 0.31,\
+        min(Window.width, Window.height) * 0.17
+    Image:
+        size: root.size
+        pos: root.pos
+        source: 'assets/images/game_over_label.png'
+
+
+<RetryButton>:
+    size:
+        min(Window.width, Window.height) * 0.24,\
+        min(Window.width, Window.height) * 0.12
+    Image:
+        size: root.size
+        pos: root.pos
+        source: 'assets/images/retry.png'
