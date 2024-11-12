@@ -72,3 +72,22 @@
         size: root.size
         pos: root.pos
         source: 'assets/images/platform_moving.png'
+
+
+<GameOverWidget>:
+    canvas.before:
+        Color:
+            rgb: hex_color('#FFFFFF')
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    BoxLayout:
+        orientation: 'vertical'
+        pos: root.width * 0.375, root.height * 0.375
+        size: root.width * 0.25, root.height * 0.25
+        Label:
+            text: 'Game over!'
+            color: hex_color('#555555')
+        Button:
+            text: 'Try again!'
+            on_release: app.start()

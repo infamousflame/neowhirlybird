@@ -1,7 +1,6 @@
 """The game widget class."""
 
 from random import choice
-from sys import exit as sys_exit
 
 from kivy.app import App
 from kivy.core.window import Window
@@ -42,7 +41,7 @@ class GameWidget(Widget):
                 child.y = cancel_velocity * dt + child.y
             self.player.ids['image'].source = 'assets/images/player_death.png'
             if len(self.children) < 2:
-                sys_exit()
+                self.app.show_game_over()
         elif (
             self.player.center_y > 0.875 * self.height
             and self.player.velocity.y > 0
