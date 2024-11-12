@@ -27,7 +27,6 @@ class GameWidget(Widget):
         super().__init__(*args, **kwargs)
         self.player: Player = self.ids['player_widget']
         self.app: WhirlybirdApp = App.get_running_app()
-        self.jumpable_platforms: int = 0
         self.modulus: float = 0.0
 
     def init(self) -> None:
@@ -66,21 +65,11 @@ class GameWidget(Widget):
             if child is self.player:
                 continue
             if child.center_y < 0 or child.center_y > self.height:
-                if isinstance(child, (
-                    Platform | BreakablePlatform | Springboard
-                )):
-                    self.jumpable_platforms -= 1
                 self.remove_widget(child)
 
     def add_platform(self) -> None:
         widget_class: type = choice(self.PLATFORM_CLASSES)
         self.add_widget(widget_class())
-        if (
-            widget_class is Platform
-            or widget_class is BreakablePlatform
-            or widget_class is Springboard
-        ):
-            self.jumpable_platforms += 1
 
 
 class WhirlybirdApp(App):
