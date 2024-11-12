@@ -9,14 +9,14 @@ from kivy.clock import Clock
 from kivy.lang.builder import Builder
 from kivy.uix.widget import Widget
 
-from platform import Platform, Cloud
+from platform import BreakablePlatform, Cloud, Platform
 from player import Player
 
 
 class GameWidget(Widget):
     """The game widget class."""
 
-    PLATFORM_CLASSES = (Platform, Cloud)
+    PLATFORM_CLASSES = (Platform, Cloud, BreakablePlatform)
 
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
@@ -46,14 +46,14 @@ class GameWidget(Widget):
             if child is self.player:
                 continue
             if child.center_y < 0 or child.center_y > self.height:
-                if isinstance(child, Platform):
+                if isinstance(child, Platform | BreakablePlatform):
                     self.jumpable_platforms -= 1
                 self.remove_widget(child)
 
     def add_platform(self) -> None:
         widget_class: type = choice(self.PLATFORM_CLASSES)
         self.add_widget(widget_class(self.children))
-        if widget_class is Platform:
+        if widget_class is Platform or widget_class is BreakablePlatform:
             self.jumpable_platforms += 1
 
 

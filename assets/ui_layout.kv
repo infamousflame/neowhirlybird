@@ -41,3 +41,14 @@
         size: root.size
         pos: root.pos
         source: 'assets/images/cloud.png'
+
+
+<BreakablePlatform>:
+    size:
+        min(app.game_widget.width, app.game_widget.height) * 0.13,\
+        min(app.game_widget.width, app.game_widget.height) * 0.03
+    Image:
+        id: image
+        size: root.size
+        pos: root.pos
+        source: 'assets/images/platform_breakable.png'

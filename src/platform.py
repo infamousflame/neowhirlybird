@@ -34,3 +34,12 @@ class Cloud(BasePlatform):
 
     def handle_collision(self, player: Player) -> None:
         App.get_running_app().game_widget.remove_widget(self)
+
+
+class BreakablePlatform(BasePlatform):
+    """The breakable platform widget class."""
+
+    def handle_collision(self, player: Player) -> None:
+        if player.y > self.y and player.velocity.y < 0:
+            self.ids['image'].source = 'assets/images/platform_void.png'
+            player.velocity.y = player.app.config['breakable_bounce'] * Window.height
