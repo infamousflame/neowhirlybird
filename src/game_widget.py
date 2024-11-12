@@ -7,7 +7,7 @@ from kivy.core.window import Window
 from kivy.uix.widget import Widget
 
 from platform import (
-    BreakablePlatform, Cloud, MovingPlatform, Platform, Springboard
+    BreakablePlatform, Cloud, MovingPlatform, PhasePlatform, Platform, Springboard
 )
 
 
@@ -15,7 +15,8 @@ class GameWidget(Widget):
     """The game widget class."""
 
     PLATFORM_CLASSES = (
-        Platform, Cloud, BreakablePlatform, Springboard, MovingPlatform
+        Platform, Cloud, BreakablePlatform, Springboard, MovingPlatform,
+        PhasePlatform
     )
 
     def __init__(self, *args, **kwargs) -> None:

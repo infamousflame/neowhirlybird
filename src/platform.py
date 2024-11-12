@@ -99,3 +99,30 @@ class MovingPlatform(BasePlatform):
             player.velocity.y = (
                 player.app.config['bounce'] * Window.height
             )
+
+
+class PhasePlatform(BasePlatform):
+    """The phase platform widget class."""
+
+    def __init__(self, y: float | None = None, *args, **kwargs) -> None:
+        super().__init__(y, *args, **kwargs)
+        self.phase: float = 0.0
+        self.phase_period: float = App.get_running_app().config['phase_period']
+
+    def update(self, dt: float, player: Player) -> None:
+        if (
+            self.collide_widget(player)
+            and player.y > self.y
+            and player.velocity.y < 0
+        ):
+            player.velocity.y = (
+                player.app.config['breakable_bounce'] * Window.height
+            )
+        self.phase += dt
+        if self.phase > self.phase_period:
+            self.phase -= self.phase_period
+            self.ids['image'].source = (
+                'assets/images/platform_void.png'
+                if self.ids['image'].source == 'assets/images/platform_phase.png'
+                else 'assets/images/platform_phase.png'
+            )

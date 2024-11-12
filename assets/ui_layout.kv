@@ -75,6 +75,17 @@
         source: 'assets/images/platform_moving.png'
 
 
+<PhasePlatform>:
+    size:
+        min(Window.width, Window.height) * 0.13,\
+        min(Window.width, Window.height) * 0.03
+    Image:
+        id: image
+        size: root.size
+        pos: root.pos
+        source: 'assets/images/platform_phase.png'
+
+
 <GameOverWidget>:
     canvas.before:
         Color:

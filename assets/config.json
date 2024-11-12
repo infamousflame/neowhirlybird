@@ -5,5 +5,6 @@
     "breakable_bounce": 0.65,
     "springboard_bounce": 1.5,
     "platform_frequency": 6,
-    "platform_speed": 0.2
+    "platform_speed": 0.2,
+    "phase_period": 1.0
 }
