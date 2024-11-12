@@ -6,6 +6,7 @@ from sys import exit as sys_exit
 
 from kivy.app import App
 from kivy.clock import Clock
+from kivy.core.window import Window
 from kivy.lang.builder import Builder
 from kivy.uix.widget import Widget
 
@@ -23,6 +24,14 @@ class GameWidget(Widget):
         self.player: Player = self.ids['player_widget']
         self.app: WhirlybirdApp = App.get_running_app()
         self.jumpable_platforms: int = 0
+        self.modulus: float = 0.0
+
+    def init(self) -> None:
+        for i in range(self.app.config['platform_frequency']):
+            self.add_widget(Platform(
+                self.children,
+                y = i / self.app.config['platform_frequency'] * Window.height
+            ))
 
     def update(self, dt: float) -> None:
         self.player.update(dt, self.children)
@@ -43,26 +52,30 @@ class GameWidget(Widget):
             cancel_velocity = -self.player.velocity.y
             for child in self.children:
                 child.y = cancel_velocity * dt + child.y
-            if random() < (
-                self.app.config['platform_spawn_chance']
-                * self.player.velocity.y * dt
+            self.modulus += self.player.velocity.y * dt / Window.height
+            if (
+            self.modulus > 1 / self.app.config['platform_frequency']
             ):
+                self.modulus -= 1 / self.app.config['platform_frequency']
                 self.add_platform()
-        elif self.jumpable_platforms < 5:
-            self.add_widget(Platform(self.children, randomise_y=True))
-            self.jumpable_platforms += 1
         for child in self.children:
             if child is self.player:
                 continue
             if child.center_y < 0 or child.center_y > self.height:
-                if isinstance(child, Platform | BreakablePlatform):
+                if isinstance(child, (
+                    Platform | BreakablePlatform | Springboard
+                )):
                     self.jumpable_platforms -= 1
                 self.remove_widget(child)
 
     def add_platform(self) -> None:
         widget_class: type = choice(self.PLATFORM_CLASSES)
         self.add_widget(widget_class(self.children))
-        if widget_class is Platform or widget_class is BreakablePlatform:
+        if (
+            widget_class is Platform
+            or widget_class is BreakablePlatform
+            or widget_class is Springboard
+        ):
             self.jumpable_platforms += 1
 
 
@@ -77,5 +90,6 @@ class WhirlybirdApp(App):
         with open("assets/ui_layout.kv") as kv_file:
             Builder.load_string(kv_file.read())
         self.game_widget: GameWidget = GameWidget()
+        self.game_widget.init()
         Clock.schedule_interval(self.game_widget.update, 1 / 60)
         return self.game_widget

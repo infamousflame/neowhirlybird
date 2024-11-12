@@ -13,15 +13,14 @@ class BasePlatform(Widget):
     """The base platform widget class."""
 
     def __init__(
-        self, platforms: list, randomise_y: bool = False, *args, **kwargs
+        self, platforms: list, y: float | None = None, *args, **kwargs
     ) -> None:
         super().__init__(*args, **kwargs)
         width: float = min(Window.width, Window.height) * 0.13
         height: float = min(Window.width, Window.height) * 0.03
         self.pos = (
             random() * (Window.width - width),
-            random() * (Window.height - height) if randomise_y
-            else Window.height * 0.97
+            Window.height - height if y is None else y
         )
 
 
