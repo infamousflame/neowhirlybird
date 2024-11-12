@@ -10,14 +10,18 @@ from kivy.core.window import Window
 from kivy.lang.builder import Builder
 from kivy.uix.widget import Widget
 
-from platform import BreakablePlatform, Cloud, Platform, Springboard
+from platform import (
+    BreakablePlatform, Cloud, MovingPlatform, Platform, Springboard
+)
 from player import Player
 
 
 class GameWidget(Widget):
     """The game widget class."""
 
-    PLATFORM_CLASSES = (Platform, Cloud, BreakablePlatform, Springboard)
+    PLATFORM_CLASSES = (
+        Platform, Cloud, BreakablePlatform, Springboard, MovingPlatform
+    )
 
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
@@ -29,12 +33,12 @@ class GameWidget(Widget):
     def init(self) -> None:
         for i in range(self.app.config['platform_frequency']):
             self.add_widget(Platform(
-                self.children,
                 y = i / self.app.config['platform_frequency'] * Window.height
             ))
 
     def update(self, dt: float) -> None:
-        self.player.update(dt, self.children)
+        for child in self.children:
+            child.update(dt, self.player)
         if (
             self.player.center_y < 0.125 * self.height
             and self.player.velocity.y < 0
@@ -70,7 +74,7 @@ class GameWidget(Widget):
 
     def add_platform(self) -> None:
         widget_class: type = choice(self.PLATFORM_CLASSES)
-        self.add_widget(widget_class(self.children))
+        self.add_widget(widget_class())
         if (
             widget_class is Platform
             or widget_class is BreakablePlatform

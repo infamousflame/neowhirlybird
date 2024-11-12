@@ -42,14 +42,9 @@ class Player(Widget):
                 if self.velocity.x > 0:
                     self.velocity.x = 0
 
-    def update(self, dt: float, platforms: list) -> None:
+    def update(self, dt: float, *args) -> None:
         self.pos = self.velocity * dt + self.pos
         self.velocity += self.acceration * dt
-        for platform in platforms:
-            if platform is self:
-                continue
-            if self.collide_widget(platform):
-                platform.handle_collision(self)
         width: float = Window.width
         if self.center_x < 0:
             self.x += width

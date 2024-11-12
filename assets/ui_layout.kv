@@ -62,3 +62,13 @@
         size: root.size
         pos: root.pos
         source: 'assets/images/springboard.png'
+
+
+<MovingPlatform>:
+    size:
+        min(app.game_widget.width, app.game_widget.height) * 0.13,\
+        min(app.game_widget.width, app.game_widget.height) * 0.05
+    Image:
+        size: root.size
+        pos: root.pos
+        source: 'assets/images/platform_moving.png'
