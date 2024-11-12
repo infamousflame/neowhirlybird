@@ -1,9 +1,8 @@
 {
-
     "gravity": 0.3,
     "horizontal_speed": 0.3,
     "bounce": 0.55,
     "breakable_bounce": 0.65,
-    "springboard_bounce": 1.0,
-    "platform_frequency": 4
+    "springboard_bounce": 1.5,
+    "platform_frequency": 6
 }
