@@ -8,10 +8,13 @@ from kivy.uix.widget import Widget
 
 from player import Player
 
+
 class BasePlatform(Widget):
     """The base platform widget class."""
 
-    def __init__(self, platforms: list, randomise_y: bool = False, *args, **kwargs) -> None:
+    def __init__(
+        self, platforms: list, randomise_y: bool = False, *args, **kwargs
+    ) -> None:
         super().__init__(*args, **kwargs)
         width: float = min(Window.width, Window.height) * 0.13
         height: float = min(Window.width, Window.height) * 0.03
@@ -20,6 +23,7 @@ class BasePlatform(Widget):
             random() * (Window.height - height) if randomise_y
             else Window.height * 0.97
         )
+
 
 class Platform(BasePlatform):
     """The platform widget class."""
@@ -42,4 +46,6 @@ class BreakablePlatform(BasePlatform):
     def handle_collision(self, player: Player) -> None:
         if player.y > self.y and player.velocity.y < 0:
             self.ids['image'].source = 'assets/images/platform_void.png'
-            player.velocity.y = player.app.config['breakable_bounce'] * Window.height
+            player.velocity.y = (
+                player.app.config['breakable_bounce'] * Window.height
+            )

@@ -26,14 +26,20 @@ class GameWidget(Widget):
 
     def update(self, dt: float) -> None:
         self.player.update(dt, self.children)
-        if self.player.center_y < 0.125 * self.height and self.player.velocity.y < 0:
+        if (
+            self.player.center_y < 0.125 * self.height
+            and self.player.velocity.y < 0
+        ):
             cancel_velocity = -self.player.velocity.y
             for child in self.children:
                 child.y = cancel_velocity * dt + child.y
             self.player.ids['image'].source = 'assets/images/player_death.png'
             if len(self.children) < 2:
                 sys_exit()
-        elif self.player.center_y > 0.875 * self.height and self.player.velocity.y > 0:
+        elif (
+            self.player.center_y > 0.875 * self.height
+            and self.player.velocity.y > 0
+        ):
             cancel_velocity = -self.player.velocity.y
             for child in self.children:
                 child.y = cancel_velocity * dt + child.y
