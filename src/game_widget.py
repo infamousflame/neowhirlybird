@@ -7,8 +7,8 @@ from kivy.core.window import Window
 from kivy.uix.widget import Widget
 
 from platform import (
-    BreakablePlatform, Cloud, MovingPlatform, PhasePlatform, Platform,
-    SpikeBall, Spikes, Springboard
+    BreakablePlatform, Cloud, HattedPlatform, MovingPlatform, PhasePlatform,
+    Platform, SpikeBall, Spikes, Springboard
 )
 
 
@@ -17,7 +17,7 @@ class GameWidget(Widget):
 
     PLATFORM_CLASSES = (
         Platform, Cloud, BreakablePlatform, Springboard, MovingPlatform,
-        PhasePlatform, Spikes, SpikeBall
+        PhasePlatform, Spikes, SpikeBall, HattedPlatform
     )
 
     def __init__(self, *args, **kwargs) -> None:
@@ -42,7 +42,7 @@ class GameWidget(Widget):
             cancel_velocity = -self.player.velocity.y
             for child in self.children:
                 child.y = cancel_velocity * dt + child.y
-            self.player.ids['image'].source = 'assets/images/player_death.png'
+            self.player.movement_state = self.player.state_type.FALLING
             if len(self.children) < 2:
                 self.app.show_game_over()
         elif (

@@ -186,3 +186,19 @@ class SpikeBall(BasePlatform):
                     player.app.config['bounce'] * Window.height
                 )
                 player.app.game_widget.remove_widget(self)
+
+
+class HattedPlatform(BasePlatform):
+    """A platform with a propeller hat."""
+
+    def __init__(self, y: float | None = None, *args, **kwargs) -> None:
+        super().__init__(y, *args, **kwargs)
+        self.platform = self.ids['platform']
+
+    def update(self, dt: float, player: Player) -> None:
+        if (
+            self.platform.collide_widget(player)
+            and player.y > self.y
+            and player.velocity.y < 0
+        ):
+            player.hat_timer = player.app.config['hat_duration']
