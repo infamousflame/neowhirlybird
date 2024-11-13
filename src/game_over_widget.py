@@ -16,9 +16,6 @@ class GameOverLabel(Widget):
 class RetryButton(Widget):
     """A button displayed when the game is over, triggers a restart."""
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
     def on_touch_up(self, touch):
         if self.collide_point(*touch.pos):
             App.get_running_app().start()
