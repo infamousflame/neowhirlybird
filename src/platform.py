@@ -47,13 +47,19 @@ class Cloud(BasePlatform):
 class BreakablePlatform(BasePlatform):
     """The breakable platform widget class."""
 
+    def __init__(self, y: float | None = None, *args, **kwargs) -> None:
+        super().__init__(y, *args, **kwargs)
+        self.active: bool = True
+
     def update(self, dt: float, player: Player) -> None:
         if (
             self.collide_widget(player)
             and player.y > self.y
             and player.velocity.y < 0
         ):
-            self.ids['image'].source = 'assets/images/platform_void.png'
+            if self.active:
+                self.active = False
+                self.ids['image'].source = 'assets/images/platform_void.png'
             player.velocity.y = (
                 player.app.config['breakable_bounce'] * Window.height
             )
@@ -106,8 +112,18 @@ class PhasePlatform(BasePlatform):
         super().__init__(y, *args, **kwargs)
         self.phase: float = 0.0
         self.phase_period: float = App.get_running_app().config['phase_period']
+        self.active: bool = True
 
     def update(self, dt: float, player: Player) -> None:
+        self.phase += dt
+        if self.phase > self.phase_period:
+            self.phase -= self.phase_period
+            self.active = not self.active
+            self.ids['image'].source = (
+                'assets/images/platform_phase.png'
+                if self.active
+                else 'assets/images/platform_void.png'
+            )
         if (
             self.collide_widget(player)
             and player.y > self.y
@@ -115,14 +131,6 @@ class PhasePlatform(BasePlatform):
         ):
             player.velocity.y = (
                 player.app.config['breakable_bounce'] * Window.height
-            )
-        self.phase += dt
-        if self.phase > self.phase_period:
-            self.phase -= self.phase_period
-            self.ids['image'].source = (
-                'assets/images/platform_void.png'
-                if self.ids['image'].source == 'assets/images/platform_phase.png'
-                else 'assets/images/platform_phase.png'
             )
 
 
@@ -136,3 +144,45 @@ class Spikes(BasePlatform):
             and player.velocity.y < 0
         ):
             player.app.show_game_over()
+
+
+class SpikeBall(BasePlatform):
+    """The spike ball widget class."""
+
+    def __init__(self, y: float | None = None, *args, **kwargs) -> None:
+        super().__init__(y, *args, **kwargs)
+        self.velocity = Vector(
+            App.get_running_app().config['platform_speed'] * Window.width,
+            0
+        )
+        if random() < 0.5:
+            self.velocity.x *= -1
+        self.phase: float = 0.0
+        self.phase_period: float = App.get_running_app().config['phase_period']
+        self.active: bool = True
+
+    def update(self, dt: float, player: Player) -> None:
+        if self.x < 0 or self.x + self.width > Window.width:
+            self.velocity.x *= -1
+        self.pos = self.velocity * dt + self.pos
+        self.phase += dt
+        if self.phase > self.phase_period:
+            self.phase -= self.phase_period
+            self.active = not self.active
+            self.ids['image'].source = (
+                'assets/images/spikeball_enabled.png'
+                if self.active
+                else 'assets/images/spikeball_disabled.png'
+            )
+        if (
+            self.collide_widget(player)
+            and player.y > self.y
+            and player.velocity.y < 0
+        ):
+            if self.active:
+                player.app.show_game_over()
+            else:
+                player.velocity.y = (
+                    player.app.config['bounce'] * Window.height
+                )
+                player.app.game_widget.remove_widget(self)

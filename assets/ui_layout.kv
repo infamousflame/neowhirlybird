@@ -96,6 +96,16 @@
         source: 'assets/images/spikes.png'
 
 
+<SpikeBall>:
+    size:
+        (min(Window.width, Window.height) * 0.13,) * 2
+    Image:
+        id: image
+        size: root.size
+        pos: root.pos
+        source: 'assets/images/spikeball_enabled.png'
+
+
 <GameOverWidget>:
     canvas.before:
         Color:
