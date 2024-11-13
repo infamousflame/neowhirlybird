@@ -86,6 +86,16 @@
         source: 'assets/images/platform_phase.png'
 
 
+<Spikes>:
+    size:
+        min(Window.width, Window.height) * 0.13,\
+        min(Window.width, Window.height) * 0.08
+    Image:
+        size: root.size
+        pos: root.pos
+        source: 'assets/images/spikes.png'
+
+
 <GameOverWidget>:
     canvas.before:
         Color:

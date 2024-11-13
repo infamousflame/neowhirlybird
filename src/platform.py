@@ -15,11 +15,9 @@ class BasePlatform(Widget):
 
     def __init__(self, y: float | None = None, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
-        width: float = min(Window.width, Window.height) * 0.13
-        height: float = min(Window.width, Window.height) * 0.03
         self.pos = (
-            random() * (Window.width - width),
-            Window.height - height if y is None else y
+            random() * (Window.width - self.width),
+            Window.height - self.height if y is None else y
         )
 
     def update(self, dt: float, player: Player) -> None:
@@ -126,3 +124,15 @@ class PhasePlatform(BasePlatform):
                 if self.ids['image'].source == 'assets/images/platform_phase.png'
                 else 'assets/images/platform_phase.png'
             )
+
+
+class Spikes(BasePlatform):
+    """The spikes widget class."""
+
+    def update(self, dt: float, player: Player) -> None:
+        if (
+            self.collide_widget(player)
+            and player.y > self.y
+            and player.velocity.y < 0
+        ):
+            player.app.show_game_over()
