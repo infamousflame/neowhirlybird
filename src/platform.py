@@ -194,6 +194,7 @@ class HattedPlatform(BasePlatform):
     def __init__(self, y: float | None = None, *args, **kwargs) -> None:
         super().__init__(y, *args, **kwargs)
         self.platform = self.ids['platform']
+        self.hat = self.ids['hat']
 
     def update(self, dt: float, player: Player) -> None:
         if (
@@ -201,4 +202,74 @@ class HattedPlatform(BasePlatform):
             and player.y > self.y
             and player.velocity.y < 0
         ):
+            self.remove_widget(self.hat)
+            player.hat_timer = player.app.config['hat_duration']
+
+
+class HattedBreakablePlatform(BasePlatform):
+    """A breakable platform with a propeller hat."""
+
+    def __init__(self, y: float | None = None, *args, **kwargs) -> None:
+        super().__init__(y, *args, **kwargs)
+        self.platform = self.ids['platform']
+        self.hat = self.ids['hat']
+
+    def update(self, dt: float, player: Player) -> None:
+        if (
+            self.platform.collide_widget(player)
+            and player.y > self.y
+            and player.velocity.y < 0
+        ):
+            self.remove_widget(self.hat)
+            player.hat_timer = player.app.config['hat_duration']
+            if self.platform.active:
+                self.platform.active = False
+                self.platform.ids['image'].source = 'assets/images/platform_void.png'
+
+
+class HattedMovingPlatform(BasePlatform):
+    """A moving platform with a propeller hat."""
+
+    def __init__(self, y: float | None = None, *args, **kwargs) -> None:
+        super().__init__(y, *args, **kwargs)
+        self.platform = self.ids['platform']
+        self.hat = self.ids['hat']
+
+    def update(self, dt: float, player: Player) -> None:
+        if self.x < 0 or self.x + self.width > Window.width:
+            self.platform.velocity.x *= -1
+        self.pos = self.platform.velocity * dt + self.pos
+        if (
+            self.platform.collide_widget(player)
+            and player.y > self.y
+            and player.velocity.y < 0
+        ):
+            self.remove_widget(self.hat)
+            player.hat_timer = player.app.config['hat_duration']
+
+
+class HattedPhasePlatform(BasePlatform):
+    """A phase platform with a propeller hat."""
+
+    def __init__(self, y: float | None = None, *args, **kwargs) -> None:
+        super().__init__(y, *args, **kwargs)
+        self.platform = self.ids['platform']
+        self.hat = self.ids['hat']
+
+    def update(self, dt: float, player: Player) -> None:
+        self.platform.phase += dt
+        if self.platform.phase > self.platform.phase_period:
+            self.platform.phase -= self.platform.phase_period
+            self.platform.active = not self.platform.active
+            self.platform.ids['image'].source = (
+                'assets/images/platform_phase.png'
+                if self.platform.active
+                else 'assets/images/platform_void.png'
+            )
+        if (
+            self.platform.collide_widget(player)
+            and player.y > self.y
+            and player.velocity.y < 0
+        ):
+            self.remove_widget(self.hat)
             player.hat_timer = player.app.config['hat_duration']

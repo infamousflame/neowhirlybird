@@ -113,6 +113,7 @@
         min(Window.width, Window.height) * 0.13,\
         min(Window.width, Window.height) * 0.09
     Image:
+        id: hat
         size:
             min(Window.width, Window.height) * 0.07,\
             min(Window.width, Window.height) * 0.04
@@ -121,6 +122,60 @@
             root.y + min(Window.width, Window.height) * 0.05
         source: 'assets/images/hat.png'
     Platform:
+        id: platform
+        pos: root.pos
+
+
+<HattedBreakablePlatform>:
+    size:
+        min(Window.width, Window.height) * 0.13,\
+        min(Window.width, Window.height) * 0.09
+    Image:
+        id: hat
+        size:
+            min(Window.width, Window.height) * 0.07,\
+            min(Window.width, Window.height) * 0.04
+        pos:
+            root.x + min(Window.width, Window.height) * 0.03,\
+            root.y + min(Window.width, Window.height) * 0.05
+        source: 'assets/images/hat.png'
+    BreakablePlatform:
+        id: platform
+        pos: root.pos
+
+
+<HattedMovingPlatform>:
+    size:
+        min(Window.width, Window.height) * 0.13,\
+        min(Window.width, Window.height) * 0.11
+    Image:
+        id: hat
+        size:
+            min(Window.width, Window.height) * 0.07,\
+            min(Window.width, Window.height) * 0.04
+        pos:
+            root.x + min(Window.width, Window.height) * 0.03,\
+            root.y + min(Window.width, Window.height) * 0.07
+        source: 'assets/images/hat.png'
+    MovingPlatform:
+        id: platform
+        pos: root.pos
+
+
+<HattedPhasePlatform>:
+    size:
+        min(Window.width, Window.height) * 0.13,\
+        min(Window.width, Window.height) * 0.09
+    Image:
+        id: hat
+        size:
+            min(Window.width, Window.height) * 0.07,\
+            min(Window.width, Window.height) * 0.04
+        pos:
+            root.x + min(Window.width, Window.height) * 0.03,\
+            root.y + min(Window.width, Window.height) * 0.05
+        source: 'assets/images/hat.png'
+    PhasePlatform:
         id: platform
         pos: root.pos
 

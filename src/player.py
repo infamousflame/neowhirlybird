@@ -69,22 +69,21 @@ class Player(Widget):
             self.x += width
         elif self.center_x > width:
             self.x -= width
-        if self.movement_state is not self.old_state or self.hat_timer > 0.0:
-            self.ids['image'].source = (
-                (
-                    'assets/images/player_l_hat.png'
-                    if self.hat_timer > 0.0 else
-                    'assets/images/player_l.png'
-                )
-                if self.movement_state is self.state_type.FACING_LEFT
-                else (
-                    'assets/images/player_r_hat.png'
-                    if self.hat_timer > 0.0 else
-                    'assets/images/player_r.png'
-                )
-                if self.movement_state is self.state_type.FACING_RIGHT
-                else 'assets/images/player_death.png'
-                if self.movement_state is self.state_type.FALLING
-                else 'assets/images/player.png'
+        self.ids['image'].source = (
+            (
+                'assets/images/player_l_hat.png'
+                if self.hat_timer > 0.0 else
+                'assets/images/player_l.png'
             )
+            if self.movement_state is self.state_type.FACING_LEFT
+            else (
+                'assets/images/player_r_hat.png'
+                if self.hat_timer > 0.0 else
+                'assets/images/player_r.png'
+            )
+            if self.movement_state is self.state_type.FACING_RIGHT
+            else 'assets/images/player_death.png'
+            if self.movement_state is self.state_type.FALLING
+            else 'assets/images/player.png'
+        )
         self.old_state = self.movement_state
