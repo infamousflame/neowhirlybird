@@ -8,6 +8,13 @@
         Rectangle:
             pos: self.pos
             size: self.size
+    Label:
+        id: score_label
+        pos: self.height, root.height - 2 *self.height
+        text: '0.0'
+        color: hex_color('#555555')
+        size: self.texture_size
+        font_name: 'assets/fonts/whirlybird_font.ttf'
     Player:
         id: player_widget
         size:

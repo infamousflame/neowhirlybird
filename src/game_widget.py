@@ -4,7 +4,6 @@ from random import choice
 
 from kivy.app import App
 from kivy.core.window import Window
-from kivy.uix.label import Label
 from kivy.uix.widget import Widget
 
 from platform import (
@@ -12,6 +11,7 @@ from platform import (
     HattedMovingPlatform, HattedPhasePlatform, HattedPlatform,
     MovingPlatform, PhasePlatform,Platform, SpikeBall, Spikes, Springboard
 )
+from player import Player
 
 
 class GameWidget(Widget):
@@ -28,6 +28,8 @@ class GameWidget(Widget):
         self.player: Player = self.ids['player_widget']
         self.app: WhirlybirdApp = App.get_running_app()
         self.modulus: float = 0.0
+        self.score: float = 0.0
+        self.score_label = self.ids['score_label']
 
     def init(self) -> None:
         for i in range(self.app.config['platform_frequency']):
@@ -46,17 +48,22 @@ class GameWidget(Widget):
         ):
             cancel_velocity = -self.player.velocity.y
             for child in self.children:
-                child.y = cancel_velocity * dt + child.y
+                if isinstance(child, BasePlatform | Player):
+                    child.y = cancel_velocity * dt + child.y
             self.player.movement_state = self.player.state_type.FALLING
-            if len(self.children) < 2:
+            if len(self.children) < 3:
                 self.app.show_game_over()
         elif (
             self.player.center_y > 0.875 * self.height
             and self.player.velocity.y > 0
         ):
+            self.score += self.player.velocity.y * dt / Window.height
             cancel_velocity = -self.player.velocity.y
             for child in self.children:
-                child.y = cancel_velocity * dt + child.y
+                if child is self.player:
+                    print('child is player')
+                if isinstance(child, BasePlatform | Player):
+                    child.y = cancel_velocity * dt + child.y
             self.modulus += self.player.velocity.y * dt / Window.height
             if (
                 self.modulus > 1 / self.app.config['platform_frequency']
@@ -68,6 +75,7 @@ class GameWidget(Widget):
                 continue
             if child.center_y < 0 or child.center_y > self.height:
                 self.remove_widget(child)
+        self.score_label.text = f'{100 * self.score:.0f}'
 
     def add_platform(self) -> None:
         self.add_widget(choice(self.PLATFORM_CLASSES)())
