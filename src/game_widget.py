@@ -4,19 +4,20 @@ from random import choice
 
 from kivy.app import App
 from kivy.core.window import Window
+from kivy.uix.label import Label
 from kivy.uix.widget import Widget
 
 from platform import (
-    BreakablePlatform, Cloud, HattedBreakablePlatform, HattedMovingPlatform,
-    HattedPhasePlatform, HattedPlatform, MovingPlatform, PhasePlatform,
-    Platform, SpikeBall, Spikes, Springboard
+    BasePlatform, BreakablePlatform, Cloud, HattedBreakablePlatform,
+    HattedMovingPlatform, HattedPhasePlatform, HattedPlatform,
+    MovingPlatform, PhasePlatform,Platform, SpikeBall, Spikes, Springboard
 )
 
 
 class GameWidget(Widget):
     """The game widget class."""
 
-    PLATFORM_CLASSES = (
+    PLATFORM_CLASSES: tuple = (
         Platform, Cloud, BreakablePlatform, Springboard, MovingPlatform,
         PhasePlatform, Spikes, SpikeBall, HattedPlatform,
         HattedBreakablePlatform, HattedMovingPlatform, HattedPhasePlatform
@@ -36,7 +37,9 @@ class GameWidget(Widget):
 
     def update(self, dt: float) -> None:
         for child in self.children:
-            child.update(dt, self.player)
+            if isinstance(child, BasePlatform):
+                child.update(dt, self.player)
+        self.player.update(dt)
         if (
             self.player.center_y < 0.125 * self.height
             and self.player.velocity.y < 0

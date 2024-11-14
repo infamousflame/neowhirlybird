@@ -57,7 +57,7 @@ class Player(Widget):
                 if self.velocity.x > 0:
                     self.velocity.x = 0
 
-    def update(self, dt: float, *args) -> None:
+    def update(self, dt: float) -> None:
         self.pos = self.velocity * dt + self.pos
         if self.hat_timer > 0:
             self.hat_timer -= dt
