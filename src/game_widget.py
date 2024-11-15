@@ -1,6 +1,6 @@
 """The game widget class."""
 
-from random import choice
+from random import choices
 
 from kivy.app import App
 from kivy.core.window import Window
@@ -22,6 +22,7 @@ class GameWidget(Widget):
         PhasePlatform, Spikes, SpikeBall, HattedPlatform,
         HattedBreakablePlatform, HattedMovingPlatform, HattedPhasePlatform
     )
+    WEIGHTS: tuple = (5, 3, 3, 3, 3, 3, 4, 4, 2, 1, 1, 1)
 
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
@@ -78,4 +79,4 @@ class GameWidget(Widget):
         self.score_label.text = f'{100 * self.score:.0f}'
 
     def add_platform(self) -> None:
-        self.add_widget(choice(self.PLATFORM_CLASSES)())
+        self.add_widget(choices(self.PLATFORM_CLASSES, self.WEIGHTS)[0]())
