@@ -22,7 +22,7 @@ class GameWidget(Widget):
         PhasePlatform, Spikes, SpikeBall, HattedPlatform,
         HattedBreakablePlatform, HattedMovingPlatform, HattedPhasePlatform
     )
-    WEIGHTS: tuple = (5, 3, 3, 3, 3, 3, 4, 4, 2, 1, 1, 1)
+    WEIGHTS: tuple = ()
 
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
@@ -37,6 +37,7 @@ class GameWidget(Widget):
             self.add_widget(Platform(
                 y=(i / self.app.config['platform_frequency'] * Window.height)
             ))
+        self.WEIGHTS = tuple(self.app.config['weights'])
 
     def update(self, dt: float) -> None:
         for child in self.children:

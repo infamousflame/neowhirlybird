@@ -8,5 +8,6 @@
     "platform_speed": 0.2,
     "phase_period": 1.0,
     "hat_speed": 1.5,
-    "hat_duration": 5.0
+    "hat_duration": 5.0,
+    "weights": [5, 3, 3, 3, 3, 3, 3, 3, 2, 1, 1, 1]
 }
