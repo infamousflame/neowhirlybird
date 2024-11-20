@@ -1,15 +1,13 @@
-"""A remake of the Google Play built-in Whirlybird game, which has appeares to
-have disappeared from many Android devices for an unknown reason.
-"""
+"""Set everything up."""
 
 from os import chdir, getcwd
 from pathlib import Path
 from sys import executable
 import sys
 
-from whirlybird_app import WhirlybirdApp
+from src.whirlybird_app import WhirlybirdApp
 
-if __name__ == '__main__':
+def main() -> None:
     old_cwd: str = getcwd()
     chdir(
         Path(executable).parent / '_internal'

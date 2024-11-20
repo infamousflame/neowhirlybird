@@ -7,8 +7,8 @@ from kivy.clock import Clock
 from kivy.core.window import Window
 from kivy.lang.builder import Builder
 
-from game_widget import GameWidget
-from game_over_widget import GameOverWidget
+from src.game_widget import GameWidget
+from src.game_over_widget import GameOverWidget
 
 
 class WhirlybirdApp(App):

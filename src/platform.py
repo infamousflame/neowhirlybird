@@ -7,7 +7,7 @@ from kivy.core.window import Window
 from kivy.uix.widget import Widget
 from kivy.vector import Vector
 
-from player import Player
+from src.player import Player
 
 
 class BasePlatform(Widget):

@@ -6,12 +6,12 @@ from kivy.app import App
 from kivy.core.window import Window
 from kivy.uix.widget import Widget
 
-from platform import (
+from src.platform import (
     BasePlatform, BreakablePlatform, Cloud, HattedBreakablePlatform,
     HattedMovingPlatform, HattedPhasePlatform, HattedPlatform,
     MovingPlatform, PhasePlatform,Platform, SpikeBall, Spikes, Springboard
 )
-from player import Player
+from src.player import Player
 
 
 class GameWidget(Widget):
