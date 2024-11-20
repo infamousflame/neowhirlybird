@@ -2,6 +2,10 @@
 have disappeared from many Android devices for an unknown reason.
 """
 
+__author__ = 'Krishna Ranchhod'
+__version__ = '1.0.0'
+__license__ = 'MIT'
+
 from src import main
 
 if __name__ == '__main__':
