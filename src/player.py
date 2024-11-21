@@ -79,7 +79,6 @@ class Player(Widget):
         if self.gyro_enabled:
             gyro_data: float | None = gyroscope.rotation[1]
             if gyro_data is not None:
-                gyro_data = round(gyro_data, 2)
                 self.acceration.x = (
                     gyro_data * self.horizontal_acceleration
                     * Window.width
