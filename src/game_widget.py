@@ -38,6 +38,7 @@ class GameWidget(Widget):
                 y=(i / self.app.config['platform_frequency'] * Window.height)
             ))
         self.WEIGHTS = tuple(self.app.config['weights'])
+        self.player.init()
 
     def update(self, dt: float) -> None:
         for child in self.children:
