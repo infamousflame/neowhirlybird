@@ -19,11 +19,11 @@ class WhirlybirdApp(App):
         self.root = None
 
     def build(self) -> GameWidget:
-        self.title = "Whirlybird"
-        self.icon = "assets/images/icon.png"
-        with open("assets/config.json") as config_file:
+        self.title = 'Whirlybird'
+        self.icon = 'assets/images/icon.png'
+        with open('assets/config.json', 'rt') as config_file:
             self.config: dict = loads(config_file.read())
-        with open("assets/ui_layout.kv") as kv_file:
+        with open('assets/ui_layout.kv', 'rt') as kv_file:
             Builder.load_string(kv_file.read())
         return self.start()
 
