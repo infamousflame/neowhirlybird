@@ -12,7 +12,7 @@ need to consider building it yourself.
 ### Building from source
 
 This project's license permits you to build it yourself from this source code
-(or a modified version), and distribute that as well. This also allows you to
+(or a modified version), and distribute that as well, under the conditions of the MIT License. This also allows you to
 get it to work on a platform I have not provided an official build for.
 
 You can build it with whatever works, but I have provided spec files for
