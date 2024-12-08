@@ -1,5 +1,6 @@
 """Runs the actual game."""
 
+from datetime import datetime
 from json import loads
 
 from kivy.app import App
@@ -23,6 +24,12 @@ class WhirlybirdApp(App):
         self.icon = 'assets/images/icon.png'
         with open('assets/config.json', 'rt') as config_file:
             self.config: dict = loads(config_file.read())
+        now: datetime = datetime.now()
+        self.config['hat_sprite'] = (
+            'christmas_hat'
+            if now.month == 12 and 11 <= now.day <= 25
+            else 'hat'
+        )
         with open('assets/ui_layout.kv', 'rt') as kv_file:
             Builder.load_string(kv_file.read())
         return self.start()

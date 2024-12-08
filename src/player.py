@@ -112,4 +112,9 @@ class Player(Widget):
             if self.movement_state is self.state_type.FALLING
             else 'assets/images/player.png'
         )
+        self.ids['hat'].source = (
+            f"assets/images/{self.app.config['hat_sprite']}.png"
+            if self.hat_timer > 0.0
+            else 'assets/images/hat_void.png'
+        )
         self.old_state = self.movement_state

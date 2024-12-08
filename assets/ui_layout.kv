@@ -31,6 +31,15 @@
         size: root.size
         pos: root.pos
         source: 'assets/images/player_r.png'
+    Image:
+        id: hat
+        size:
+            root.width * 7 / 13,\
+            root.height * 4 / 12
+        pos:
+            root.x + root.width * 3 / 13,\
+            root.y + root.height * 8 / 12
+        source: 'assets/images/hat_void.png'
 
 
 <Platform>:
@@ -127,7 +136,7 @@
         pos:
             root.x + min(Window.width, Window.height) * 0.03,\
             root.y + min(Window.width, Window.height) * 0.05
-        source: 'assets/images/hat.png'
+        source: f"assets/images/{app.config['hat_sprite']}.png"
     Platform:
         id: platform
         pos: root.pos
@@ -145,7 +154,7 @@
         pos:
             root.x + min(Window.width, Window.height) * 0.03,\
             root.y + min(Window.width, Window.height) * 0.05
-        source: 'assets/images/hat.png'
+        source: f"assets/images/{app.config['hat_sprite']}.png"
     BreakablePlatform:
         id: platform
         pos: root.pos
@@ -163,7 +172,7 @@
         pos:
             root.x + min(Window.width, Window.height) * 0.03,\
             root.y + min(Window.width, Window.height) * 0.07
-        source: 'assets/images/hat.png'
+        source: f"assets/images/{app.config['hat_sprite']}.png"
     MovingPlatform:
         id: platform
         pos: root.pos
@@ -181,7 +190,7 @@
         pos:
             root.x + min(Window.width, Window.height) * 0.03,\
             root.y + min(Window.width, Window.height) * 0.05
-        source: 'assets/images/hat.png'
+        source: f"assets/images/{app.config['hat_sprite']}.png"
     PhasePlatform:
         id: platform
         pos: root.pos
