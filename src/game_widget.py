@@ -24,6 +24,10 @@ class GameWidget(Widget):
     )
     WEIGHTS: tuple = ()
 
+    JUMPABLE_PLATFORM_INDICES: tuple = (0, 2, 3, 4, 5, 8, 9, 10, 11)
+    JUMPABLE_PLATFORM_CLASSES: tuple = ()
+    JUMPABLE_WEIGHTS: tuple = ()
+
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.player: Player = self.ids['player_widget']
@@ -38,6 +42,12 @@ class GameWidget(Widget):
                 y=(i / self.app.config['platform_frequency'] * Window.height)
             ))
         self.WEIGHTS = tuple(self.app.config['weights'])
+        self.JUMPABLE_PLATFORM_CLASSES = tuple(
+            self.PLATFORM_CLASSES[i] for i in self.JUMPABLE_PLATFORM_INDICES
+        )
+        self.JUMPABLE_WEIGHTS = tuple(
+            self.WEIGHTS[i] for i in self.JUMPABLE_PLATFORM_INDICES
+        )
         self.player.init()
 
     def update(self, dt: float) -> None:
@@ -81,4 +91,14 @@ class GameWidget(Widget):
         self.score_label.text = f'{100 * self.score:.0f}'
 
     def add_platform(self) -> None:
-        self.add_widget(choices(self.PLATFORM_CLASSES, self.WEIGHTS)[0]())
+        if sum(
+            isinstance(child, self.JUMPABLE_PLATFORM_CLASSES)
+            for child in self.children
+        ) < self.app.config['min_jumpable_platforms']:
+            self.add_widget(
+                choices(
+                    self.JUMPABLE_PLATFORM_CLASSES, self.JUMPABLE_WEIGHTS
+                )[0]()
+            )
+        else:
+            self.add_widget(choices(self.PLATFORM_CLASSES, self.WEIGHTS)[0]())
