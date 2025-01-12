@@ -77,7 +77,9 @@ class Player(Widget):
             self.hat_timer -= dt
             self.velocity.y = self.app.config['hat_speed'] * Window.height
         if self.gyro_enabled:
-            gyro_data: float | None = gyroscope.rotation[1]
+            gyro_data: float | None = gyroscope.rotation[
+                Window.width < Window.height
+            ]
             if gyro_data is not None:
                 self.acceration.x = (
                     gyro_data * self.horizontal_acceleration
