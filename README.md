@@ -55,8 +55,7 @@ lot, so this will not be added until I have finished balancing everything out.
 ## License Information
 
 This project makes use of the [Kivy](https://kivy.org/) framework (Copyright
-(c) 2010-2024 Kivy Team and other contributors) and its dependencies (each
+(c) 2010-2025 Kivy Team and other contributors) and its dependencies (each
 with their respective copyright holder). Both this code and Kivy are
 distributed under the MIT License. Please see here for
 [license information for Kivy's dependencies](https://kivy.org/doc/stable/guide/licensing.html).
-
