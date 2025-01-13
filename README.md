@@ -29,14 +29,10 @@ you download the correct version for your device.
 
 For those who are new to Whirlybird, welcome! The game's pretty
 straightforward - move left and right, using the A/D keys on the keyboard or 
-tilting a device about its vertical (y) axis - to bounce off platforms and
-avoid the spikes.
-
-For those already familiar with the Google game, there are some things to
-note: Tilting the device works well, but often you may find that it does not
-return to stationary when tilted back. There are also some issues if the
-device is rotated in other ways, such as when in a turning vehicle. I am still
-working on a fix for these issues.
+tilting a device - to bounce off platforms and avoid the spikes. If
+controlling by tilting the device, the player sprite will move in the
+direction you tilt downward. The device must have a gravity sensor for tilting
+controls to work.
 
 I am also exploring additional ways to control the game on a wider range of
 devices.
