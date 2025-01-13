@@ -1,7 +1,7 @@
 {
     "gravity": 0.3,
     "horizontal_speed": 0.3,
-    "horizontal_acceleration": 1.0,
+    "grav_speed": 1.0,
     "bounce": 0.55,
     "breakable_bounce": 0.65,
     "springboard_bounce": 1.5,

@@ -1,12 +1,13 @@
 """The player class."""
 
 from enum import Enum
+from math import sqrt
 
 from kivy.app import App
 from kivy.core.window import Window
 from kivy.uix.widget import Widget
 from kivy.vector import Vector
-from plyer import gyroscope
+from plyer import gravity
 
 
 class MovementState(Enum):
@@ -30,23 +31,21 @@ class Player(Widget):
             -self.app.config['gravity'] * Window.height
         )
         self.horizontal_speed: float = self.app.config['horizontal_speed']
-        self.horizontal_acceleration: float = (
-            self.app.config['horizontal_acceleration']
-        )
+        self.grav_speed: float = self.app.config['grav_speed']
         self.movement_state: MovementState = self.state_type.FACING_RIGHT
         self.old_state: MovementState = self.state_type.FACING_RIGHT
         self.hat_timer: float = 0
-        self.gyro_enabled: bool = False
+        self.grav_enabled: bool = False
         Window.bind(on_key_down=self._on_key_down)
         Window.bind(on_key_up=self._on_key_up)
 
     def init(self) -> None:
         try:
-            gyroscope.enable()
+            gravity.enable()
         except NotImplementedError:
             pass
         else:
-            self.gyro_enabled = True
+            self.grav_enabled = True
 
     def _on_key_down(self, window, key, *args) -> None:
         match key:
@@ -76,14 +75,20 @@ class Player(Widget):
         if self.hat_timer > 0:
             self.hat_timer -= dt
             self.velocity.y = self.app.config['hat_speed'] * Window.height
-        if self.gyro_enabled:
-            gyro_data: float | None = gyroscope.rotation[
-                Window.width < Window.height
-            ]
-            if gyro_data is not None:
-                self.acceration.x = (
-                    gyro_data * self.horizontal_acceleration
-                    * Window.width
+        if self.grav_enabled:
+            gravity_sensor_data: tuple | None = gravity.gravity
+            if gravity_sensor_data[0] is not None:
+                gravity_magnitude: float = sqrt(
+                    gravity_sensor_data[0] ** 2
+                    + gravity_sensor_data[1] ** 2
+                    + gravity_sensor_data[2] ** 2
+                )
+                gravity_data = gravity_sensor_data[
+                    Window.height < Window.width
+                ] / gravity_magnitude
+                self.velocity.x = (
+                    gravity_data * self.grav_speed * Window.width
+                    * (1 if Window.height < Window.width else -1)
                 )
                 self.movement_state = (
                     self.state_type.FACING_LEFT
