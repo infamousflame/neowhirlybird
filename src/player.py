@@ -54,11 +54,13 @@ class Player(Widget):
                     -Window.width * self.horizontal_speed
                 )
                 self.movement_state = self.state_type.FACING_LEFT
+                self.grav_enabled = False
             case 100:
                 self.velocity.x = (
                     Window.width * self.horizontal_speed
                 )
                 self.movement_state = self.state_type.FACING_RIGHT
+                self.grav_enabled = False
 
     def _on_key_up(self, window, key, *args) -> None:
         match key:
