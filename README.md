@@ -29,7 +29,7 @@ you download the correct version for your device.
 
 For those who are new to Whirlybird, welcome! The game's pretty
 straightforward - move left and right, using the A/D keys on the keyboard or 
-tilting a device - to bounce off platforms and avoid the spikes. If
+tilting the device - to bounce off platforms and avoid the spikes. If
 controlling by tilting the device, the player sprite will move in the
 direction you tilt downward. The device must have a gravity sensor for tilting
 controls to work.
