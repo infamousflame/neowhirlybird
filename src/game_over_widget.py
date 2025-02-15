@@ -1,7 +1,6 @@
 """A widget displayed when the game is over."""
 
 from kivy.app import App
-from kivy.properties import ObjectProperty
 from kivy.uix.widget import Widget
 
 

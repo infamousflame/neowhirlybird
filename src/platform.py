@@ -11,7 +11,7 @@ from src.player import Player
 
 
 class BasePlatform(Widget):
-    """The base platform widget class."""
+    """Common base class for all platform classes."""
 
     def __init__(self, y: float | None = None, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
