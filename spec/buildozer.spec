@@ -22,7 +22,7 @@ source.include_patterns = assets/*,README.md,LICENSE
 source.exclude_exts = spec
 
 # (list) List of directory to exclude (let empty to not exclude anything)
-source.exclude_dirs = bin,build,dist,venv
+source.exclude_dirs = bin,build,dist,spec
 
 # (list) List of exclusions using pattern matching
 # Do not prefix with './'
