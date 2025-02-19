@@ -33,6 +33,7 @@ class GameWidget(Widget):
         self.player: Player = self.ids['player_widget']
         self.app: WhirlybirdApp = App.get_running_app()
         self.modulus: float = 0.0
+        self.jumpable_modulus: int = 0
         self.score: float = 0.0
         self.score_label = self.ids['score_label']
 
@@ -91,14 +92,16 @@ class GameWidget(Widget):
         self.score_label.text = f'{100 * self.score:.0f}'
 
     def add_platform(self) -> None:
-        if sum(
-            isinstance(child, self.JUMPABLE_PLATFORM_CLASSES)
-            for child in self.children
-        ) < self.app.config['min_jumpable_platforms']:
+        self.jumpable_modulus += 1
+        if self.jumpable_modulus >= self.app.config['garunteed_jumpable_in']:
             self.add_widget(
                 choices(
                     self.JUMPABLE_PLATFORM_CLASSES, self.JUMPABLE_WEIGHTS
                 )[0]()
             )
+            self.jumpable_modulus = 0
         else:
-            self.add_widget(choices(self.PLATFORM_CLASSES, self.WEIGHTS)[0]())
+            platform = choices(self.PLATFORM_CLASSES, self.WEIGHTS)[0]()
+            self.add_widget(platform)
+            if isinstance(platform, self.JUMPABLE_PLATFORM_CLASSES):
+                self.jumpable_modulus = 0

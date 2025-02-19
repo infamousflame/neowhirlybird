@@ -10,7 +10,7 @@
     "phase_period": 1.0,
     "hat_speed": 1.5,
     "hat_duration": 5.0,
-    "weights": [5, 5, 3, 3, 3, 3, 5, 5, 1, 1, 1, 1],
+    "weights": [7, 7, 3, 3, 3, 3, 7, 7, 1, 1, 1, 1],
     "hat_sprite": "hat",
-    "min_jumpable_platforms": 3
+    "garunteed_jumpable_in": 3
 }
