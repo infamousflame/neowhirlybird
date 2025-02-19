@@ -12,8 +12,9 @@ need to consider building it yourself.
 ### Building from source
 
 This project's license permits you to build it yourself from this source code
-(or a modified version), and distribute that as well, under the conditions of the MIT License. This also allows you to
-get it to work on a platform I have not provided an official build for.
+(or a modified version), and distribute that as well, under the conditions of
+the MIT License. This also allows you to get it to work on a platform I have
+not provided an official build for.
 
 You can build it with whatever works, but I have provided spec files for
 [Buildozer](https://github.com/kivy/buildozer) and
@@ -54,4 +55,5 @@ This project makes use of the [Kivy](https://kivy.org/) framework (Copyright
 (c) 2010-2025 Kivy Team and other contributors) and its dependencies (each
 with their respective copyright holder). Both this code and Kivy are
 distributed under the MIT License. Please see here for
-[license information for Kivy's dependencies](https://kivy.org/doc/stable/guide/licensing.html).
+[license information for Kivy's dependencies](
+    https://kivy.org/doc/stable/guide/licensing.html).
