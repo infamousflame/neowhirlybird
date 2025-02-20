@@ -165,6 +165,7 @@ class SpikeBall(BasePlatform):
     def update(self, dt: float, player: Player) -> None:
         if self.x < 0 or self.x + self.width > Window.width:
             self.velocity.x *= -1
+            self.pos = self.velocity * dt + self.pos
         self.pos = self.velocity * dt + self.pos
         self.phase += dt
         if self.phase > self.phase_period:
@@ -239,6 +240,7 @@ class HattedMovingPlatform(BasePlatform):
     def update(self, dt: float, player: Player) -> None:
         if self.x < 0 or self.x + self.width > Window.width:
             self.platform.velocity.x *= -1
+            self.pos = self.velocity * dt + self.pos
         self.pos = self.platform.velocity * dt + self.pos
         if (
             self.platform.collide_widget(player)
