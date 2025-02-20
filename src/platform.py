@@ -94,6 +94,7 @@ class MovingPlatform(BasePlatform):
     def update(self, dt: float, player: Player) -> None:
         if self.x < 0 or self.x + self.width > Window.width:
             self.velocity.x *= -1
+            self.pos = self.velocity * dt + self.pos
         self.pos = self.velocity * dt + self.pos
         if (
             self.collide_widget(player)
