@@ -1,3 +1,5 @@
+#:import version main.__version__
+
 #:import hex_color kivy.utils.get_color_from_hex
 #:import Window kivy.core.window.Window
 
@@ -10,8 +12,8 @@
             size: self.size
     Label:
         id: score_label
-        pos: self.height, root.height - 2 *self.height
-        text: '0.0'
+        pos: self.height, root.height - 2 * self.height
+        text: '0'
         color: hex_color('#555555')
         size: self.texture_size
         font_name: 'assets/fonts/whirlybird_font.ttf'
@@ -211,6 +213,13 @@
         pos:
             (Window.width - self.width) / 2,\
             Window.height * 0.25 - self.height / 2
+    Label:
+        pos: root.width - self.width - self.height, self.height
+        text: version
+        color: hex_color('#555555')
+        size: self.texture_size
+        font_name: 'assets/fonts/whirlybird_font.ttf'
+
 
 
 <GameOverLabel>:
