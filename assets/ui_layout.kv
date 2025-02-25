@@ -205,10 +205,14 @@
         Rectangle:
             pos: self.pos
             size: self.size
-    GameOverLabel:
+    Image:
+        source: 'assets/images/game_over_label.png'
         pos:
             (Window.width - self.width) / 2,\
             Window.height * 0.75 - self.height / 2
+        size:
+            min(Window.width, Window.height) * 0.31,\
+            min(Window.width, Window.height) * 0.17
     RetryButton:
         pos:
             (Window.width - self.width) / 2,\
@@ -221,17 +225,6 @@
         font_name: 'assets/fonts/whirlybird_font.ttf'
 
 
-
-<GameOverLabel>:
-    size:
-        min(Window.width, Window.height) * 0.31,\
-        min(Window.width, Window.height) * 0.17
-    Image:
-        size: root.size
-        pos: root.pos
-        source: 'assets/images/game_over_label.png'
-
-
 <RetryButton>:
     size:
         min(Window.width, Window.height) * 0.24,\
@@ -240,3 +233,32 @@
         size: root.size
         pos: root.pos
         source: 'assets/images/retry.png'
+
+
+<PauseWidget>:
+    canvas.before:
+        Color:
+            rgb: hex_color('#FFFFFF')
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    PlayButton:
+        pos:
+            (Window.width - self.width) / 2,\
+            (Window.height - self.height) / 2
+    Label:
+        pos: root.width - self.width - self.height, self.height
+        text: version
+        color: hex_color('#555555')
+        size: self.texture_size
+        font_name: 'assets/fonts/whirlybird_font.ttf'
+
+
+<PlayButton>:
+    size:
+        min(Window.width, Window.height) * 0.24,\
+        min(Window.width, Window.height) * 0.12
+    Image:
+        size: root.size
+        pos: root.pos
+        source: 'assets/images/play.png'

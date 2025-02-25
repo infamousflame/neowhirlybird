@@ -10,6 +10,7 @@ from kivy.lang.builder import Builder
 
 from src.game_widget import GameWidget
 from src.game_over_widget import GameOverWidget
+from src.pause_widget import PauseWidget
 
 
 class WhirlybirdApp(App):
@@ -51,4 +52,17 @@ class WhirlybirdApp(App):
         Clock.unschedule(self.game_widget.update)
         Window.remove_widget(self.root)
         self.root = GameOverWidget()
+        Window.add_widget(self.root)
+        del self.game_widget
+
+    def pause(self) -> None:
+        Clock.unschedule(self.game_widget.update)
+        Window.remove_widget(self.root)
+        self.root = PauseWidget()
+        Window.add_widget(self.root)
+
+    def resume(self) -> None:
+        Clock.schedule_interval(self.game_widget.update, 1 / 60)
+        Window.remove_widget(self.root)
+        self.root = self.game_widget
         Window.add_widget(self.root)

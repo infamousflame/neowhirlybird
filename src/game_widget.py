@@ -90,6 +90,8 @@ class GameWidget(Widget):
             if child.center_y < 0 or child.center_y > self.height:
                 self.remove_widget(child)
         self.score_label.text = f'{100 * self.score:.0f}'
+        if not Window.focus:
+            self.app.pause()
 
     def add_platform(self) -> None:
         self.jumpable_modulus += 1
