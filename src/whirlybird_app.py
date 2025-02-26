@@ -53,7 +53,7 @@ class WhirlybirdApp(App):
         Window.remove_widget(self.root)
         self.root = GameOverWidget()
         Window.add_widget(self.root)
-        del self.game_widget
+        self.game_widget = None
 
     def pause(self) -> None:
         Clock.unschedule(self.game_widget.update)
