@@ -163,3 +163,5 @@ cython_debug/
 # Buildozer
 
 .buildozer
+bin/
+buildozer.spec
