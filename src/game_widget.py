@@ -57,7 +57,7 @@ class GameWidget(Widget):
                 child.update(dt, self.player)
         self.player.update(dt)
         if (
-            self.player.center_y < 0.125 * self.height
+            self.player.center_y < 0.125 * Window.height
             and self.player.velocity.y < 0
         ):
             cancel_velocity = -self.player.velocity.y
@@ -68,7 +68,7 @@ class GameWidget(Widget):
             if len(self.children) < 3:
                 self.app.show_game_over()
         elif (
-            self.player.center_y > 0.875 * self.height
+            self.player.center_y > 0.875 * Window.height
             and self.player.velocity.y > 0
         ):
             self.score += self.player.velocity.y * dt / Window.height
@@ -87,7 +87,7 @@ class GameWidget(Widget):
         for child in self.children:
             if child is self.player:
                 continue
-            if child.center_y < 0 or child.center_y > self.height:
+            if child.center_y < 0 or child.center_y > Window.height:
                 self.remove_widget(child)
         self.score_label.text = f'{100 * self.score:.0f}'
         if not Window.focus:
