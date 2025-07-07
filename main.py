@@ -6,7 +6,9 @@ __author__ = 'Krishna Ranchhod'
 __version__ = '1.0.5'
 __license__ = 'MIT'
 
+from sys import exit
+
 from src import main
 
 if __name__ == '__main__':
-    main()
+    exit(main())
