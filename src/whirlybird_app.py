@@ -25,6 +25,7 @@ class WhirlybirdApp(App):
         self.icon = 'assets/images/icon.png'
         with open('assets/config.json', 'rt') as config_file:
             self.config: dict = loads(config_file.read())
+            self.config['version'] = '1.0.5'
         now: datetime = datetime.now()
         self.config['hat_sprite'] = (
             'christmas_hat'
@@ -52,6 +53,7 @@ class WhirlybirdApp(App):
         Clock.unschedule(self.game_widget.update)
         Window.remove_widget(self.root)
         self.root = GameOverWidget()
+        self.root.ids['version'].text = self.config['version']
         Window.add_widget(self.root)
         self.game_widget = None
 
@@ -59,6 +61,7 @@ class WhirlybirdApp(App):
         Clock.unschedule(self.game_widget.update)
         Window.remove_widget(self.root)
         self.root = PauseWidget()
+        self.root.ids['version'].text = self.config['version']
         Window.add_widget(self.root)
 
     def resume(self) -> None:
