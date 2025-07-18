@@ -10,5 +10,5 @@ windows_from_windows:
 android_from_linux:
 	python3 -m buildozer --version
 	cp spec/buildozer.spec buildozer.spec
-	python3 -m buildozer -v android debug
+	python3 -m buildozer android debug
 	rm buildozer.spec
